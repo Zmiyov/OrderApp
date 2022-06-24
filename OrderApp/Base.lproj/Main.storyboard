@@ -34,7 +34,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="Z7h-c4-Zvi" kind="show" id="ETW-fy-Gu8"/>
+                                    <segue destination="Z7h-c4-Zvi" kind="show" destinationCreationSelector="showMenu:sender:" id="ETW-fy-Gu8"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
