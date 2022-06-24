@@ -18,7 +18,7 @@ struct MenuItem: Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
-        case detaiText = "description"
+        case detailText = "description"
         case price
         case category
         case imageURL = "image_url"
