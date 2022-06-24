@@ -48,6 +48,7 @@ class MenuController {
     }
     
     typealias MinutesToPrepare = Int
+    
     func submitOrder(forMenuIDs menuIDs: [Int]) async throws -> MinutesToPrepare {
         
         let orderURL = baseURL.appendingPathComponent("order")
