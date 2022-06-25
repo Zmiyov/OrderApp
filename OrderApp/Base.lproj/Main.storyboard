@@ -104,14 +104,74 @@
                     <view key="view" contentMode="scaleToFill" id="2s3-Rk-7XQ">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="HcI-pC-d42">
+                                <rect key="frame" x="15" y="103" width="360" height="263"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo.on.rectangle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kRa-gP-Deb">
+                                        <rect key="frame" x="0.0" y="0.6666666666666714" width="360" height="209.66666666666669"/>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="olK-EC-28p">
+                                        <rect key="frame" x="0.0" y="219" width="360" height="20.333333333333343"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4B-7c-R6n">
+                                                <rect key="frame" x="0.0" y="0.0" width="296.33333333333331" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="$ Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fkg-oX-NBo">
+                                                <rect key="frame" x="304.33333333333331" y="0.0" width="55.666666666666686" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Detail" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DJn-zb-p6h">
+                                        <rect key="frame" x="0.0" y="247.33333333333331" width="360" height="15.666666666666686"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K2G-VZ-C6r">
+                                <rect key="frame" x="15" y="702" width="360" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="LBW-W2-mSa"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Add To Order"/>
+                                <connections>
+                                    <action selector="orderButtonTapped:" destination="Iev-Iu-xC6" eventType="touchUpInside" id="DqF-PR-FaJ"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="KQV-7H-ssb"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="HcI-pC-d42" firstAttribute="top" secondItem="KQV-7H-ssb" secondAttribute="top" constant="15" id="140-wM-2da"/>
+                            <constraint firstItem="K2G-VZ-C6r" firstAttribute="leading" secondItem="KQV-7H-ssb" secondAttribute="leading" constant="15" id="5gr-ec-DxL"/>
+                            <constraint firstItem="HcI-pC-d42" firstAttribute="leading" secondItem="KQV-7H-ssb" secondAttribute="leading" constant="15" id="8Wo-pl-5be"/>
+                            <constraint firstItem="KQV-7H-ssb" firstAttribute="bottom" secondItem="K2G-VZ-C6r" secondAttribute="bottom" constant="15" id="Hx8-e6-cgP"/>
+                            <constraint firstItem="KQV-7H-ssb" firstAttribute="trailing" secondItem="HcI-pC-d42" secondAttribute="trailing" constant="15" id="JTp-zy-5eh"/>
+                            <constraint firstItem="KQV-7H-ssb" firstAttribute="trailing" secondItem="K2G-VZ-C6r" secondAttribute="trailing" constant="15" id="TvR-XZ-tp1"/>
+                            <constraint firstItem="kRa-gP-Deb" firstAttribute="height" secondItem="2s3-Rk-7XQ" secondAttribute="height" multiplier="0.25" id="wWA-fC-kav"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="JoW-OJ-TBT"/>
+                    <connections>
+                        <outlet property="addToOrderButton" destination="K2G-VZ-C6r" id="w3p-gv-E3U"/>
+                        <outlet property="detailLabel" destination="DJn-zb-p6h" id="sJP-f2-Zw9"/>
+                        <outlet property="imageView" destination="kRa-gP-Deb" id="mXz-5S-W0d"/>
+                        <outlet property="nameLabel" destination="x4B-7c-R6n" id="Slc-XH-a3d"/>
+                        <outlet property="priceLabel" destination="fkg-oX-NBo" id="gIV-J3-mw7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WCq-Qf-Yde" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3089" y="63"/>
+            <point key="canvasLocation" x="3087.6923076923076" y="62.559241706161131"/>
         </scene>
         <!--Menu-->
         <scene sceneID="vcA-5b-JxJ">
@@ -198,6 +258,7 @@
     <resources>
         <image name="bag" catalog="system" width="128" height="128"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
+        <image name="photo.on.rectangle" catalog="system" width="128" height="97"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
