@@ -10,7 +10,7 @@ import UIKit
 class MenuTableViewController: UITableViewController {
     
     let category: String
- //   let menuController = MenuController()
+    var imageLoadTasks: [IndexPath: Task<Void, Never>] = [:]
     var menuItems = [MenuItem]()
     
     init?(coder: NSCoder, category: String) {
@@ -37,6 +37,15 @@ class MenuTableViewController: UITableViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        //Cancel image load tasks that are no longer needed
+        imageLoadTasks.forEach { key, value in
+            value.cancel()
+        }
+    }
+    
     func updateUI(with menuItems: [MenuItem]) {
         self.menuItems = menuItems
         self.tableView.reloadData()
@@ -48,6 +57,26 @@ class MenuTableViewController: UITableViewController {
         let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? MenuItemCell else { return }
+        
+        let menuItem = menuItems[indexPath.row]
+        
+        cell.itemName = menuItem.name
+        cell.price = menuItem.price
+        cell.image = nil
+        
+        imageLoadTasks[indexPath] = Task.init {
+            if let image = try? await MenuController.shared.fetchImage(from: menuItem.imageURL) {
+                if let currentIndexPath = self.tableView.indexPath(for: cell), currentIndexPath == indexPath {
+                    cell.image = image
+                }
+            }
+            imageLoadTasks[indexPath] = nil
+        }
+                
     }
     
     @IBSegueAction func showMenuItem(_ coder: NSCoder, sender: Any?) -> MenuItemDetailViewController? {
@@ -80,13 +109,9 @@ class MenuTableViewController: UITableViewController {
         return cell
     }
     
-    func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
-        let menuItem = menuItems[indexPath.row]
-        
-        var content = cell.defaultContentConfiguration()
-        content.text = menuItem.name
-        content.secondaryText = menuItem.price.formatted(.currency(code: "usd"))
-        cell.contentConfiguration = content
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Cancel the image fetching task it is no longer needed
+        imageLoadTasks[indexPath]?.cancel()
     }
     
 

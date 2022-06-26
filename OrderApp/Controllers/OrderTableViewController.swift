@@ -10,12 +10,22 @@ import UIKit
 class OrderTableViewController: UITableViewController {
     
     var minutesToPrepareOrder = 0
+    var imageLoadTasks: [IndexPath: Task<Void, Never>] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = editButtonItem
 
         NotificationCenter.default.addObserver(tableView!, selector: #selector(UITableView.reloadData), name: MenuController.orderUpdatedNotification, object: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        //Cancel image load tasks that are no longer needed
+        imageLoadTasks.forEach { key, value in
+            value.cancel()
+        }
     }
     
     func uploadOrder() {
@@ -36,6 +46,26 @@ class OrderTableViewController: UITableViewController {
         let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
+        
+        guard let cell = cell as? MenuItemCell else { return }
+        
+        let menuItem = MenuController.shared.order.menuItems[indexPath.row]
+        
+        cell.itemName = menuItem.name
+        cell.price = menuItem.price
+        cell.image = nil
+        
+        imageLoadTasks[indexPath] = Task.init {
+            if let image = try? await MenuController.shared.fetchImage(from: menuItem.imageURL) {
+                if let currentIndexPath = self.tableView.indexPath(for: cell), currentIndexPath == indexPath {
+                    cell.image = image
+                }
+            }
+            imageLoadTasks[indexPath] = nil
+        }
     }
     
     
@@ -88,15 +118,6 @@ class OrderTableViewController: UITableViewController {
         return cell
     }
     
-    func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
-        let menuItem = MenuController.shared.order.menuItems[indexPath.row]
-        
-        var content = cell.defaultContentConfiguration()
-        content.text = menuItem.name
-        content.secondaryText = menuItem.price.formatted(.currency(code: "usd"))
-        cell.contentConfiguration = content
-    }
-    
 
     
     // Override to support conditional editing of the table view.
@@ -115,6 +136,11 @@ class OrderTableViewController: UITableViewController {
             
 //            tableView.deleteRows(at: [indexPath], with: .fade)
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Cancel the image fetching task it is no longer needed
+        imageLoadTasks[indexPath]?.cancel()
     }
     
 
